@@ -32,16 +32,19 @@ def load_z408():
     return np.array(lines)
 
 
-z408 = load_z408()
-z408_flat = z408.flatten()
+z408_flat = load_z408().flatten()
 part_size = z408_flat.size // 3
+
+indexes = []
+for idx1 in range(part_size):
+    idx2, idx3 = idx1 + part_size, idx1 + (part_size * 2)
+    indexes.append((idx1, idx2, idx3))
 
 
 def count_symbol_positions(cipher):
     count = 0
-    for idx1 in range(part_size):
-        idx2, idx3 = idx1 + part_size, idx1 + (part_size * 2)
-        a, b, c = z408_flat[idx1], z408_flat[idx2], z408_flat[idx3]
+    for idx1, idx2, idx3 in indexes:
+        a, b, c = cipher[idx1], cipher[idx2], cipher[idx3]
         if a == b or a == c or b == c:
             count += 1
 
@@ -49,7 +52,7 @@ def count_symbol_positions(cipher):
 
 
 def run_test(rounds=10000):
-    total = 0
+    total = 0.0
 
     print("Characters that appear in the same position in more than one of three cipher sections")
     print("z408:")
@@ -59,7 +62,7 @@ def run_test(rounds=10000):
         np.random.shuffle(z408_flat)
         total += count_symbol_positions(z408_flat)
 
-    print(f"{rounds} random shuffles (mean):")
+    print("{} random shuffles (mean):".format(rounds))
     print(total / rounds)
 
 
