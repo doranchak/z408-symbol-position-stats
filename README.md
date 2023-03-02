@@ -7,7 +7,7 @@ To run:
 
 `python z408_symbol_locations.py`
 
-Requires at least python3.
+Requires at least python2 and numpy.
 
 
 
